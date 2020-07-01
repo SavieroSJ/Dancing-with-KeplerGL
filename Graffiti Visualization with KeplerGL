@@ -1,0 +1,23 @@
+##Visualizing Graffiti crimes in KeplerGL a 3D approach
+
+#Reading the datasets
+block = gpd.read_file('block-outlines.geojson')
+block.dropna(inplace=True)
+graffiti = gpd.read_file('graffiti.geojson')
+graffiti.dropna(inplace=True)
+
+# join datasets
+graf_block = gpd.sjoin(block, graffiti, how='inner', op='contains')
+
+# create new indexes
+graf_block.reset_index(inplace=True)
+graf_block.head()
+
+graf_block = graf_block.dissolve(by='index', aggfunc='sum')
+
+data_dict = {"graffiti": graf_block, "block": block}
+graffiti_map = keplergl.KeplerGl(height=500, 
+                                 data=data_dict)
+graffiti_map
+
+graffiti_map.save_to_html(file_name = 'graffiti.html')
