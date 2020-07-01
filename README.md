@@ -1,1 +1,1 @@
-# Graffiti-with-KeplerGL-
+the whole code can be projected by jupyter notebook environment
