@@ -1,0 +1,32 @@
+##Visualizing Earthquakes with JupyterNB & KeplerGL
+
+#importing libraries
+
+import pandas as pd
+import geopandas as gpd 
+import keplergl
+
+#too see the working directory
+pwd 
+
+#changing working directory
+import os
+os.getcwd()
+os.chdir('C:/Users/Saviero/Desktop')
+
+#Reading CSV file
+df = pd.read_csv('Worldwide-Earthquake-database.csv')
+
+# lat and lon to numeric, errors converted to nan
+df['LONGITUDE'] = pd.to_numeric(df.LONGITUDE, errors='coerce')
+df['LATITUDE'] = pd.to_numeric(df.LATITUDE, errors='coerce')
+
+# drop rows with missing lat, lon, and intensity
+df.dropna(subset=['LONGITUDE', 'LATITUDE', 'INTENSITY'], inplace=True)
+
+# convert tsunami flag from string to int
+df['FLAG_TSUNAMI'] = [1 if i=='Yes' else 0 for i in df.FLAG_TSUNAMI.values]
+
+kepler_map = keplergl.KeplerGl(height=400)
+kepler_map
+kepler_map.add_data(data=df, name="earthquakes")
